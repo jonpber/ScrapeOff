@@ -1,0 +1,69 @@
+.article {
+	text-align: center;
+	padding: 0;
+	border-radius: 20px;
+	transition: background-color .3s;
+}
+
+.article:hover {
+	background: rgba(0,0,0,0.1);
+	transition: background-color .3s;
+}
+
+body {
+	background-image: url("../img/newspaper1.jpg");
+}
+
+.container .row {
+	margin: 0;
+}
+
+h3 {
+	font-family: 'Fjalla One', sans-serif;
+}
+
+html, body, .container {
+	height: 100%;
+}
+
+.container {
+	background: white;
+	box-shadow: 1px 1px 18px 5px rgba(0, 0, 0, 0.26);
+}
+
+img {
+	width: 100%;
+}
+
+nav .nav-wrapper {
+	position: relative;
+	height: 100%;
+	padding: 0 30px;
+	background: white;
+}
+
+nav .brand-logo {
+	font-family: 'UnifrakturCook', cursive;
+	font-size: 45px;
+}
+
+nav .brand-logo {
+	color: black;
+	transition: color .3s;
+}
+
+nav ul a {
+	color: black;
+}
+
+nav .brand-logo:hover {
+	color: #4b4b4b;
+	transition: color .3s;
+}
+
+p {
+	font-family: 'Abel', sans-serif;
+	font-size: 20px;
+}
+
+

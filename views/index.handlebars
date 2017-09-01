@@ -1,0 +1,21 @@
+<div class="container">
+	<nav>
+		<div class="nav-wrapper">
+		<a href="/" class="brand-logo center">The Scraper Times</a>
+		<ul id="nav-mobile" class="right hide-on-med-and-down">
+			<li><a href="/saved">Saved Articles</a></li>
+		</ul>
+		</div>
+	</nav>
+	<div class="row">
+		{{#each articles}}
+			{{#unless this.saved}}
+				<div class="article col s6 l4">
+					<h3>{{this.title}}</h3>
+					<img src="{{this.pic}}">
+					<p>{{this.summary}}</p>
+				</div>
+			{{/unless}}
+		{{/each}}
+	</div>
+</div>
