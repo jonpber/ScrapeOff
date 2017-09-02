@@ -14,12 +14,17 @@ body {
 	background-image: url("../img/newspaper1.jpg");
 }
 
+.container {
+    overflow: auto;
+}
+
 .container .row {
 	margin: 0;
 }
 
 h3 {
 	font-family: 'Fjalla One', sans-serif;
+    font-size: 25px;
 }
 
 html, body, .container {
