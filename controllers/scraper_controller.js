@@ -1,7 +1,18 @@
 var express = require("express");
 var app = express();
-
 var router = express.Router();
+
+var request = require("request");
+var cheerio = require("cheerio");
+var mongojs = require("mongojs");
+
+// Database configuration
+var databaseUrl = "scraperWeb";
+var collections = ["scrapedData"];
+
+var db = mongojs(databaseUrl, collections);
+
+
 
 var tempObj = {
 	articles: [
@@ -29,7 +40,62 @@ var tempObj = {
 }
 
 router.get("/", function(req, res){
-	res.render("index", tempObj);
+	db.scrapedData.find(function(error, found){
+  	if (error) {
+      console.log(error);
+    }
+    // Otherwise, send the result of this query to the browser
+    else {
+      console.log(found);
+      res.render("index", {articles: found});
+    }
+  })
+});
+
+router.get("/scrape", function(req, res){
+	request("https://www.nytimes.com/section/world", function(error, response, html) {
+
+		var $ = cheerio.load(html);
+
+		var results = [];
+
+		$(".headline").each(function(i, element) {
+			if (i < 10){
+				var link = $(element).children("a").attr("href");
+				var title = $(element).text();
+
+				db.scrapedData.find({title: title}, function(error, found){
+					if (error){
+						throw error;
+					}
+
+					if (Object.keys(found).length === 0){
+						console.log("no result")
+						request(link, function(error1, response1, html1) {
+							$1 = cheerio.load(html1);
+
+							$1("div.image").each(function(i1, element1){
+								var img = $1(element1).children("img").attr("src");
+								var summary = $1(element1).parent().parent().children("p:nth-child(2)").text();
+								db.scrapedData.insert({
+									title: title,
+									link: link,
+									img: img,
+									saved: false,
+									summary: summary
+								});
+							})
+						})
+					}
+				})
+
+				
+				
+
+				
+			}
+		});
+	})
 });
 
 router.get("/saved", function(req, res){

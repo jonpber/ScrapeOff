@@ -4,6 +4,13 @@ var path = require("path");
 var app = express();
 var exphbs = require("express-handlebars");
 
+var request = require("request");
+var cheerio = require("cheerio");
+
+// Database configuration
+var databaseUrl = "scraperWeb";
+var collections = ["scrapedData"];
+
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
