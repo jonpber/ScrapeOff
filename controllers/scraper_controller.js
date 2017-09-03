@@ -11,45 +11,22 @@ var databaseUrl = "scraperWeb";
 var collections = ["scrapedData"];
 
 var db = mongojs(databaseUrl, collections);
+var ObjectId = require("mongojs").ObjectId;
 
 
-
-var tempObj = {
-	articles: [
-		{
-			title: "Great article is awesome",
-			summary: "Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg",
-			saved: false,
-			pic: "https://cdn.peopleewnetwork.com/dims4/default/996b3e3/2147483647/thumbnail/654x368/quality/90/?url=https%3A%2F%2Fcdn.peopleewnetwork.com%2Fcb%2F16%2F7c5b7aae4145a9d76c5296c42dc8%2Fthumb-peoplefeat-scotthamilton.jpg"
-		},
-
-		{
-			title: "Great article is awesome",
-			summary: "Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg",
-			saved: false,
-			pic: "https://cdn.peopleewnetwork.com/dims4/default/996b3e3/2147483647/thumbnail/654x368/quality/90/?url=https%3A%2F%2Fcdn.peopleewnetwork.com%2Fcb%2F16%2F7c5b7aae4145a9d76c5296c42dc8%2Fthumb-peoplefeat-scotthamilton.jpg"
-		},
-
-		{
-			title: "Great article is awesome",
-			summary: "Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg Blarg",
-			saved: true,
-			pic: "https://cdn.peopleewnetwork.com/dims4/default/996b3e3/2147483647/thumbnail/654x368/quality/90/?url=https%3A%2F%2Fcdn.peopleewnetwork.com%2Fcb%2F16%2F7c5b7aae4145a9d76c5296c42dc8%2Fthumb-peoplefeat-scotthamilton.jpg"
-		}
-	]
-}
 
 router.get("/", function(req, res){
-	db.scrapedData.find(function(error, found){
-  	if (error) {
-      console.log(error);
-    }
-    // Otherwise, send the result of this query to the browser
-    else {
-      console.log(found);
-      res.render("index", {articles: found});
-    }
-  })
+	db.scrapedData.find({saved: false}).sort({"_id": -1}, function(error, found){
+	  	if (error) {
+	      console.log(error);
+	    }
+	    // Otherwise, send the result of this query to the browser
+	    else {
+	      console.log(found);
+			res.render("index", {articles: found});
+			// res.render("index", {});
+	    }
+	  })
 });
 
 router.get("/scrape", function(req, res){
@@ -64,27 +41,37 @@ router.get("/scrape", function(req, res){
 				var link = $(element).children("a").attr("href");
 				var title = $(element).text();
 
-				db.scrapedData.find({title: title}, function(error, found){
+				db.scrapedData.findOne({title: title}, function(error, found){
 					if (error){
 						throw error;
 					}
 
-					if (Object.keys(found).length === 0){
-						console.log("no result")
+					if (found === null){
 						request(link, function(error1, response1, html1) {
+							// console.log("scraping for " + link);
 							$1 = cheerio.load(html1);
 
 							$1("div.image").each(function(i1, element1){
-								var img = $1(element1).children("img").attr("src");
-								var summary = $1(element1).parent().parent().children("p:nth-child(2)").text();
-								db.scrapedData.insert({
-									title: title,
-									link: link,
-									img: img,
-									saved: false,
-									summary: summary
-								});
+								// console.log(i1)
+								if (i1 === 0){
+									var img = $1(element1).children("img").attr("src");
+									var summary = $1(element1).parent().parent().children("p.story-body-text").text();
+									summary = summary.slice(0, 250);
+									summary = summary + "... (click to read article)";
+
+									db.scrapedData.insert({
+										title: title,
+										link: link,
+										img: img,
+										saved: false,
+										summary: summary
+									});
+								}
 							})
+							db.scrapedData.find().sort({"_id": -1}, function(error, found){
+								res.json(found);
+							})
+
 						})
 					}
 				})
@@ -99,7 +86,25 @@ router.get("/scrape", function(req, res){
 });
 
 router.get("/saved", function(req, res){
-	res.render("saved", tempObj);
+	db.scrapedData.find({saved: true}).sort({"_id": -1}, function(error, found){
+	  	if (error) {
+	      console.log(error);
+	    }
+	    // Otherwise, send the result of this query to the browser
+	    else {
+	      // console.log(found);
+			// res.render("index", {articles: found});
+			res.render("saved", {articles: found});
+	    }
+
+	})
 });
+
+router.put("/articles/:id", function(req, res){
+	console.log(req.params.id);
+	db.scrapedData.update({"_id": ObjectId(req.params.id)}, {$set: {saved: true}}, function(error, found){
+		res.redirect("/")
+	})
+})
 
 module.exports = router;

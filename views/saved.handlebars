@@ -9,13 +9,11 @@
 	</nav>
 	<div class="row">
 		{{#each articles}}
-			{{#if this.saved}}
-				<div class="article col s6 l4">
+			<div class="col s12">
+				<div class="article smallArticle">
 					<h3>{{this.title}}</h3>
-					<img src="{{this.pic}}">
-					<p>{{this.summary}}</p>
 				</div>
-			{{/if}}
+			</div>
 		{{/each}}
 	</div>
 </div>

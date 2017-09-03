@@ -27,6 +27,12 @@ h3 {
     font-size: 25px;
 }
 
+hr {
+	width: 75%;
+	border: 0.5px solid #c4c4c4;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+	}
+
 html, body, .container {
 	height: 100%;
 }
@@ -36,8 +42,13 @@ html, body, .container {
 	box-shadow: 1px 1px 18px 5px rgba(0, 0, 0, 0.26);
 }
 
+.iconButton {
+	/*margin-top: 5px;*/
+}
+
 img {
 	width: 100%;
+	/*height: 250px;*/
 }
 
 nav .nav-wrapper {
@@ -67,8 +78,38 @@ nav .brand-logo:hover {
 }
 
 p {
-	font-family: 'Abel', sans-serif;
+	font-family: 'Quicksand', sans-serif;
+    width: 85%;
+    margin: 25px auto;
+}
+
+.smallArticle {
+	background: #d1e0e1;
+	padding: 10px;
+    border: 1px solid #b6b6b6;
+	margin: 10px;
+	overflow: auto;
+}
+
+.smallerHeadline{
 	font-size: 20px;
 }
+
+.smallImg {
+	width: 250px;
+	height: 175px;
+}
+
+.topH1 {
+	font-size: 48px;
+	margin: 35px 0 15px;
+	font-family: 'Quicksand', sans-serif;
+}
+
+.topImg {
+	width: 75%;
+}
+
+
 
 
