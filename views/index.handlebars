@@ -1,20 +1,58 @@
 <div class="container">
 	<nav>
 		<div class="nav-wrapper">
+		<ul id="nav-mobile" class="left hide-on-med-and-down">
+			<li class="scrapeBtn"><a href="#">Scrape</a></li>
+		</ul>
 		<a href="/" class="brand-logo center">The Scraper Times</a>
 		<ul id="nav-mobile" class="right hide-on-med-and-down">
 			<li><a href="/saved">Saved Articles</a></li>
 		</ul>
 		</div>
 	</nav>
-	<div class="row">
+	<div class="row mainPageRow">
 		{{#each articles}}
-			{{#unless this.saved}}
-				<div class="article col s6 l4">
-					<h3>{{this.title}}</h3>
-					<img src="{{this.img}}">
-					<p>{{this.link}}</p>
+			{{#if @first}}
+				<div class="col s12 center">
+					<div class="article">
+						<a href="{{this.link}}" class="headline"><h1 class="topH1">{{this.title}}</h1></a>
+						<img src="{{this.img}}" class="topImg">
+						<p>{{this.summary}}</p>
+
+						<form action="/articles/{{this._id}}?_method=PUT" method="POST">
+							<button type="submit" class="saveArticle">Save Article  <span class="material-icons saveIcon">fiber_pin</span></button>
+						</form>
+
+						<hr>
+						{{!-- <button data-url='{{this.link}}'>Read</button><button action=''>Save</button> --}}
+					</div>
+					
 				</div>
+				
+				
+			{{/if}}
+
+			{{#unless @first}}
+			<div class="col s12">
+				<div class="article smallArticle">
+					<div class="col s11">
+						<a href="{{this.link}}" class="headline"><h3>{{this.title}}</h3></a>
+					</div>
+					<div class="col s1 iconButton">
+{{!-- 						<div class="col s12">
+							<form action="{{this.link}}">
+								<button type="submit" class="saveArticle material-icons readIcon">book</button>
+							</form>
+						</div> --}}
+						{{!-- <div class="col s12"> --}}
+							<form action="/articles/{{this._id}}?_method=PUT" method="POST">
+								<button type="submit" class="saveArticle material-icons saveIcon">fiber_pin</button>
+							</form>
+{{!-- 							<i class="material-icons saveIcon" data-id={{}}>fiber_pin</i> --}}
+						{{!-- </div> --}}
+					</div>
+				</div>
+			</div>
 			{{/unless}}
 		{{/each}}
 	</div>
