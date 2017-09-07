@@ -15,40 +15,41 @@
 			{{#if @first}}
 				<div class="col s12 center">
 					<div class="article">
-						<h1 class="topH1">{{this.title}}</h1>
+						<a href="{{this.link}}" class="headline"><h1 class="topH1">{{this.title}}</h1></a>
 						<img src="{{this.img}}" class="topImg">
 						<p>{{this.summary}}</p>
-						
-						<form action={{this.link}} method="POST">
-							<button >Read</button>
-						</form>
+
 						<form action="/articles/{{this._id}}?_method=PUT" method="POST">
-							<button type="submit" class="saveArticle">Save Article</button>
+							<button type="submit" class="saveArticle">Save Article  <span class="material-icons saveIcon">fiber_pin</span></button>
 						</form>
+
+						<hr>
 						{{!-- <button data-url='{{this.link}}'>Read</button><button action=''>Save</button> --}}
 					</div>
 					
 				</div>
 				
-				<hr>
+				
 			{{/if}}
 
 			{{#unless @first}}
 			<div class="col s12">
 				<div class="article smallArticle">
 					<div class="col s11">
-						<h3>{{this.title}}</h3>
+						<a href="{{this.link}}" class="headline"><h3>{{this.title}}</h3></a>
 					</div>
 					<div class="col s1 iconButton">
-						<div class="col s12">
-							<i class="material-icons readIcon">book</i>
-						</div>
-						<div class="col s12">
+{{!-- 						<div class="col s12">
+							<form action="{{this.link}}">
+								<button type="submit" class="saveArticle material-icons readIcon">book</button>
+							</form>
+						</div> --}}
+						{{!-- <div class="col s12"> --}}
 							<form action="/articles/{{this._id}}?_method=PUT" method="POST">
 								<button type="submit" class="saveArticle material-icons saveIcon">fiber_pin</button>
 							</form>
 {{!-- 							<i class="material-icons saveIcon" data-id={{}}>fiber_pin</i> --}}
-						</div>
+						{{!-- </div> --}}
 					</div>
 				</div>
 			</div>

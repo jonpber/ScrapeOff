@@ -11,7 +11,22 @@
 		{{#each articles}}
 			<div class="col s12">
 				<div class="article smallArticle">
-					<h3>{{this.title}}</h3>
+					<div class="col s11">
+						<a href="{{this.link}}" class="headline"><h3>{{this.title}}</h3></a>
+					</div>
+					<div class="col s1 iconButton">
+						<div class="col s12">
+							<form action="/articles/{{this._id}}?_method=DELETE" method="POST">
+								<button type="submit" class="saveArticle material-icons deleteArticleIcon">close</button>
+							</form>
+						</div>
+						<div class="col s12">
+							{{!-- <form action="/articles/{{this._id}}" method="GET"> --}}
+								<button type="submit" class="saveArticle material-icons commentIcon" dataId='{{this._id}}'>record_voice_over</button>
+							{{!-- </form> --}}
+{{!-- 							<i class="material-icons saveIcon" data-id={{}}>fiber_pin</i> --}}
+						</div>
+					</div>
 				</div>
 			</div>
 		{{/each}}
