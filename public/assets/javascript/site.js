@@ -30,7 +30,7 @@ $(function(){
 				for (let i = 0; i < data.comments.length; i++){
 					let comment = $("<div class='comment valign-wrapper'>")
 					.append("<p class='commentText'>" + data.comments[i] + "</p>")
-					.append("<button class='removeBtn'>X</button>")
+					.append("<button class='removeBtn' data-id='" + data._id + "'>X</button>")
 					.appendTo(commentDiv);
 				}
 			}
@@ -38,8 +38,8 @@ $(function(){
 			commentDiv.appendTo(modalContent);
 			modalContent.append("<hr>")
 			.append("<h3>Add Comment</h3>")
-			let submitForm = $("<form action='/articles/"+ id +"' method='POST'>")
-			.append("<textarea class='newComment' name='comment'>")
+			let submitForm = $("<form action='/articles/"+ id +"' method='POST' class='commentSubmitForm'>")
+			.append("<textarea class='newComment' name='comment' required>")
 			.append("<button type='submit' class='submitComment'>Submit</button>")
 			.appendTo(modalContent);
 			modalContent.appendTo(modal);
@@ -52,16 +52,18 @@ $(function(){
 	$("body").on("click", ".scrapeBtn", function(event){
 		event.preventDefault();
 		$.get("/scrape", function(data, status){
-			console.log(data);
+			let articles = data.found;
+			// console.log(data);
+			console.log(data.added)
 			$(".mainPageRow").empty();
-			for (let i = 0; i < data.length; i++){
+			for (let i = 0; i < articles.length; i++){
 				if (i === 0){
 					let column = $("<div class='col s12 center'>")
 					let article = $("<div class='article'>")
-					.append("<a href='" + data[i].link +"'class='headline'><h1 class='topH1'>" + data[i].title +"</h1></a>")
-					.append("<img src='" + data[i].img + "' class='topImg'>")
-					.append("<p>" + data[i].summary + "</p>")
-					let saveForm = $("<form action='/articles/" + data[i].title_id + "?_method=PUT' method='POST'>")
+					.append("<a href='" + articles[i].link +"'class='headline'><h1 class='topH1'>" + articles[i].title +"</h1></a>")
+					.append("<img src='" + articles[i].img + "' class='topImg'>")
+					.append("<p>" + articles[i].summary + "</p>")
+					let saveForm = $("<form action='/articles/" + articles[i].title_id + "?_method=PUT' method='POST'>")
 					.append("<button type='submit' class='saveArticle'>Save Article  <span class='material-icons saveIcon'>fiber_pin</span></button>")
 					.appendTo(article);
 					article.append("<hr>")
@@ -72,10 +74,10 @@ $(function(){
 					let column = $("<div class='col s12 center'>")
 					let article = $("<div class='article smallArticle'>")
 					let articleHeadlineCol = $("<div class='col s11'>")
-					.append("<a href='" + data[i].link + "' class='headline'><h3>" + data[i].title + "</h3></a>")
+					.append("<a href='" + articles[i].link + "' class='headline'><h3>" + articles[i].title + "</h3></a>")
 					.appendTo(article);
 					let buttonCol = $("<div class='col s1 iconButton'>")
-					let saveForm = $("<form action='/articles/" + data[i].title_id + "?_method=PUT' method='POST'>")
+					let saveForm = $("<form action='/articles/" + articles[i].title_id + "?_method=PUT' method='POST'>")
 					.append("<button type='submit' class='saveArticle material-icons saveIcon'>fiber_pin</button>")
 					.appendTo(article);
 					column.append(article).appendTo(".mainPageRow");
@@ -87,10 +89,40 @@ $(function(){
 	})
 
 
-	// }
+	$("body").on("click", ".removeBtn", function(){
+		let id = $(this).attr("data-id");
+		let text = $(this).parent().children("p").text();
 
-	// $.getJSON("/scrape", function(data) {
-	// 		updateScrapedArticles(data);
-	// });
+		$.ajax({
+		url: '/articles/'+ id +'/'+ text,
+		type: 'DELETE',
+		success: function(result) {
+			// console.log(result);
+		 //   $(".modal").iziModal("close");
+		$(".modal").empty();
+		let modalContent = $("<div class='content'>");
+		modalContent.append("<h3>Comments</h3>");
+		let commentDiv = $("<div class='commentDiv'>")
+		if (result.comments !== undefined){
+			for (let i = 0; i < result.comments.length; i++){
+				let comment = $("<div class='comment valign-wrapper'>")
+				.append("<p class='commentText'>" + result.comments[i] + "</p>")
+				.append("<button class='removeBtn' data-id='" + result._id + "'>X</button>")
+				.appendTo(commentDiv);
+			}
+		}
+
+		commentDiv.appendTo(modalContent);
+		modalContent.append("<hr>")
+		.append("<h3>Add Comment</h3>")
+		let submitForm = $("<form action='/articles/"+ id +"' method='POST' class='commentSubmitForm'>")
+		.append("<textarea class='newComment' name='comment' required>")
+		.append("<button type='submit' class='submitComment'>Submit</button>")
+		.appendTo(modalContent);
+		modalContent.appendTo(".modal");
+
+		}
+		});
+	})
 
 })
