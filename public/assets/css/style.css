@@ -32,6 +32,11 @@ button {
 	margin: 5px;
 }
 
+.commentDiv {
+	overflow: scroll;
+	max-height: 370px;
+}
+
 .commentText {
 	display: inline-block;
 	margin: 10px 0;

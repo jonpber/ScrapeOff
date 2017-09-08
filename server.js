@@ -4,7 +4,12 @@ var path = require("path");
 var app = express();
 var exphbs = require("express-handlebars");
 var method = require("method-override");
+var mongoose = require("mongoose");
 
+var Comment = require("./models/Comment.js");
+var Article = require("./models/Article.js");
+
+mongoose.Promise = Promise;
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
